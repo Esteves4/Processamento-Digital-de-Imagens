@@ -114,7 +114,7 @@ imshow(D_out);
 subplot(4,3,12);
 imhist(D_out);
 
-%% Equalização local de histograma
+%% 3.26 - Equalização local de histograma
 home;
 clear;
 src = imread("../pics/chapter_3/Fig0326(a)(embedded_square_noisy_512).tif");
