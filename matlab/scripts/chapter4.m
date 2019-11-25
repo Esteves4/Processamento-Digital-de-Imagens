@@ -171,9 +171,9 @@ G5 = H5.*F;
 
 b = mat2gray(real(ifft2(G1)));
 c = mat2gray(real(ifft2(G2)));
-d = mat2gray(real(ifft2(G2)));
-e = mat2gray(real(ifft2(G2)));
-f = mat2gray(real(ifft2(G2)));
+d = mat2gray(real(ifft2(G3)));
+e = mat2gray(real(ifft2(G4)));
+f = mat2gray(real(ifft2(G5)));
 
 b = b(1:size(src,1),1:size(src,2));
 c = c(1:size(src,1),1:size(src,2));
@@ -218,9 +218,9 @@ G5 = H5.*F;
 
 b = mat2gray(real(ifft2(G1)));
 c = mat2gray(real(ifft2(G2)));
-d = mat2gray(real(ifft2(G2)));
-e = mat2gray(real(ifft2(G2)));
-f = mat2gray(real(ifft2(G2)));
+d = mat2gray(real(ifft2(G3)));
+e = mat2gray(real(ifft2(G4)));
+f = mat2gray(real(ifft2(G5)));
 
 b = b(1:size(src,1),1:size(src,2));
 c = c(1:size(src,1),1:size(src,2));
@@ -242,12 +242,13 @@ imshow(e)
 subplot(3,2,6);
 imshow(f)
 
-%%
+%% 4.46 
 
 H1 = fftshift(lpfilter('btw', 500, 500, 50, 1));
 H2 = fftshift(lpfilter('btw', 500, 500, 50, 2));
 H3 = fftshift(lpfilter('btw', 500, 500, 50, 5));
 H4 = fftshift(lpfilter('btw', 500, 500, 50, 10));
+
 
 figure; 
 subplot(1,4,1);
