@@ -33,7 +33,7 @@ c2 = col*2;
 I2 = zeros(r2,c2);
 I2(1:2:r2, 1:2:c2) = c;
 for i = 1:2:r2
-    for j = 1:2:c2;
+    for j = 1:2:c2
         I2(i,j+1) = I2(i,j);
         I2(i+1,j) = I2(i,j);
         I2(i+1,j+1) = I2(i,j);
@@ -283,9 +283,9 @@ G5 = H5.*F;
 
 b = mat2gray(real(ifft2(G1)));
 c = mat2gray(real(ifft2(G2)));
-d = mat2gray(real(ifft2(G2)));
-e = mat2gray(real(ifft2(G2)));
-f = mat2gray(real(ifft2(G2)));
+d = mat2gray(real(ifft2(G3)));
+e = mat2gray(real(ifft2(G4)));
+f = mat2gray(real(ifft2(G5)));
 
 b = b(1:size(src,1),1:size(src,2));
 c = c(1:size(src,1),1:size(src,2));
