@@ -210,22 +210,7 @@ home;
 clear;
 a = imread('../pics/chapter_10/Fig1039(a)(polymersomes).tif');
 
-T = mean(a);
-T_old = 0;
-deltaT = 10^-3;
-
-while T - T_old >= deltaT
-    T_old = T;
-    
-    G1 = a(a > T);
-    G2 = a(a <= T);
-
-    m1 = mean(G1);
-    m2 = mean(G2);
-
-    T = (m1 + m2)/2.0;
-    
-end
+T = alg_thresh(a,10^-3);
 
 c = imquantize(a,T);
 d = imbinarize(a);
@@ -297,4 +282,164 @@ subplot(2,3,5);
 imhist(d)
 subplot(2,3,6);
 imshow(e, []);
+%% Figura 10.42 - Gradiente para melhorar a limiarização global.
+home;
+clear;
+a = imread('../pics/chapter_10/Fig1042(a)(septagon_small_noisy_mean_0_stdv_10).tif');
+a = rescale(a);
 
+[Gmag,Gdir] = imgradient(a);
+
+level = prctile(Gmag,[99.7],'all');
+
+c = imbinarize(Gmag,level);
+
+d = immultiply(c,a);
+d = rescale(d);
+
+[counts,binLocations] = imhist(d);
+
+counts(1) = 0;
+
+level = otsuthresh(counts);
+
+e = imbinarize(a, level);
+
+figure; 
+subplot(2,3,1);
+imshow(a, []);
+subplot(2,3,2);
+imhist(a)
+subplot(2,3,3);
+imshow(c, []);
+subplot(2,3,4);
+imshow(d, []);
+subplot(2,3,5);
+stem(binLocations,counts, 'Marker','none');
+subplot(2,3,6);
+imshow(e, []);
+
+%% Figura 10.45 - Limiarização global múltipla
+home;
+clear;
+a = imread('../pics/chapter_10/Fig1045(a)(iceberg).tif');
+a = rescale(a);
+
+level = multithresh(a,2);
+c = imquantize(a,level);
+
+figure; 
+subplot(1,3,1);
+imshow(a, []);
+subplot(1,3,2);
+imhist(a)
+subplot(1,3,3);
+imshow(c, []);
+
+%% Figura 10.46 - Limiarização variável por meio de particionamento da imagem.
+home;
+clear;
+a = imread('../pics/chapter_10/Fig1046(a)(septagon_noisy_shaded).tif');
+a = rescale(a);
+
+T = alg_thresh(a,10^-3);
+c = imquantize(a,T);
+
+level = graythresh(a);
+d = imquantize(a,level);
+
+[m,n] = size(a);
+
+m = ceil(m/2);
+n = ceil(n/3);
+
+fun = @(block_struct) imquantize(block_struct.data,graythresh(block_struct.data));
+
+f = blockproc(a,[m n],fun);
+
+f = medfilt2(f);
+f = rescale(f);
+level = graythresh(f);
+f = imquantize(f,level);
+
+
+figure; 
+subplot(2,3,1);
+imshow(a, []);
+subplot(2,3,2);
+imhist(a)
+subplot(2,3,3);
+imshow(c, []);
+subplot(2,3,4);
+imshow(d, []);
+subplot(2,3,5);
+imshow(f, []);
+% subplot(2,3,6);
+% imshow(e, []);
+
+%% Figura 10.51 - Segmentação por crescimento da região
+home;
+clear;
+a = imread('../pics/chapter_10/Fig1051(a)(defective_weld).tif');
+
+c = imquantize(a,254);
+c = rescale(c);
+
+c = 1 - c;
+[x,y] = find(c==0);
+
+[m,n] = size(c);
+
+d = zeros(m,n);
+
+for i = 1:size(x)
+    BW = grayconnected(c,x(i),y(i));
+    d = d + bwmorph(BW,'shrink',Inf);
+end
+
+d = imbinarize(d,0.1);
+
+a = rescale(a);
+c = rescale(c);
+e = imabsdiff(a,c);
+e = 1 - e;
+c = 1 - c;
+e = c + e;
+e = 1 - e;
+c = 1 - c;
+
+level = multithresh(e,2);
+g = imquantize(e,level);
+h = imquantize(e,min(level));
+
+[x,y] = find(d==1);
+
+[m,n] = size(h);
+
+i = zeros(m,n);
+for j = 1:size(x)
+    i = i + regiongrowing(1-h,x(j),y(j));
+end
+
+figure; 
+subplot(3,3,1);
+imshow(a, []);
+subplot(3,3,2);
+imhist(a)
+subplot(3,3,3);
+imshow(c, []);
+subplot(3,3,4);
+imshow(d);
+subplot(3,3,5);
+imshow(e, []);
+subplot(3,3,6);
+imhist(e);
+subplot(3,3,7);
+imshow(g,[]);
+subplot(3,3,8);
+imshow(h, []);
+subplot(3,3,9);
+imshow(i, []);
+
+figure;
+imshow(d);
