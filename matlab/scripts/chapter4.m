@@ -49,6 +49,51 @@ subplot(1,3,2);
 imshow(b, []);
 subplot(1,3,3);
 imshow(c, []);
+
+%% Figura 4.27 - Propriedades do espectro de Fourier
+home;
+clear;
+src = imread("../pics/chapter_4/Fig0427(a)(woman).tif");
+rectangle = imread("../pics/chapter_4/Fig0424(a)(rectangle).tif");
+
+[M,N] = size(rectangle);
+
+% Fourier da imagem e retangulo
+dft = fft2(src,M,N);
+dft_rect = fft2(rectangle);
+
+% Construindo imagem só com angulo
+fftB = 1.*exp(i*angle(dft));
+imageC = real(ifft2(fftB));
+
+% Espectro da imagem
+espectro = log(1+abs(fftshift(dft)));
+%imageC = abs(imageB);
+imageC = imageC(1:size(src,1), 1:size(src,2));
+
+% Imagem com espectro do rectangulo
+fftE = abs(dft_rect).*exp(i*angle(dft));
+imageE = ifft2(fftE);
+imageE = imageE(1:size(src,1), 1:size(src,2));
+
+% Imagem com anuglo do rectangulo
+fftF = abs(dft).*exp(i*angle(dft_rect));
+imageF = ifft2(fftF);
+
+figure; 
+subplot(2,3,1);
+imshow(src);
+subplot(2,3,2);
+imshow(angle(dft),[-pi,pi]);
+subplot(2,3,3);
+imshow(imageC,[]);
+subplot(2,3,4);
+imshow(espectro, []);
+subplot(2,3,5);
+imshow(imageE, []);
+subplot(2,3,6);
+imshow(imageF, []);
+
 %% Figura 4.31 - Ilustração do aliasing em imagens reamostradas.
 home;
 clear;

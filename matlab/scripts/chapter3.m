@@ -61,9 +61,9 @@ for i = 8:-1:1
   temp = temp*(2^(i-1));
   
   total = total + temp;
-    
+
   subplot(3, 3, i+1);
-  imshow(double(temp));
+  imshow(temp, []);
   
 end
 
@@ -113,6 +113,53 @@ subplot(4,3,11);
 imshow(D_out);
 subplot(4,3,12);
 imhist(D_out);
+
+%% 3.25 - Especificação de histograma
+home;
+clear;
+src = imread('../pics/chapter_3/Fig3.20(a).jpg');
+
+% Função de saida
+T = ones(1,256);
+
+T(1:127) = linspace(0,10,127);
+T(127:200) = linspace(10, 120, 74);
+T(200:256) = linspace(120, 256, 57);
+
+T = rescale(T,0,255);
+
+
+% Histograma especificado
+binLocations = linspace(0,255,256);
+counts = zeros(256,1);
+
+counts(1:15) = linspace(0,7*10^4,15);
+counts(15:28) = linspace(7*10^4, 1.31*10^4,14);
+counts(28:190) = linspace(1.31*10^4, 0, 163);
+counts(190:194) = linspace(0, 1.31*10^4, 5);
+counts(194:256) = linspace(1.31*10^4, 0, 63);
+
+% Imagem equalizada
+imgeq = histeq(src);
+
+[M,N] = size(src);
+src = uint8(src)+1;
+
+for i = 1:M
+    for j = 1:N
+        imgeq(i,j) = T(imgeq(i,j));
+    end
+end
+
+figure;
+subplot(2,3,1);
+stem(binLocations,counts, 'Marker','none');
+subplot(2,3,2);
+plot(0:255,T);
+subplot(2,3,3);
+imhist(imgeq);
+subplot(2,3,4);
+imshow(imgeq);
 
 %% 3.26 - Equalização local de histograma
 home;
