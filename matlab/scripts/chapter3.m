@@ -117,7 +117,7 @@ imhist(D_out);
 %% 3.25 - Especificação de histograma
 home;
 clear;
-src = imread('../pics/chapter_3/Fig3.20(a).jpg');
+src = imread('../pics/chapter_3/Fig0323(a)(mars_moon_phobos).tif');
 
 % Função de saida
 T = ones(1,256);
